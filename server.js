@@ -3,5 +3,5 @@ const serverConfig = require('./configs/server.config');
 const app = expresss();
 
 app.listen(serverConfig.PORT, () => {
-    console.log('listening on port :${serverConfig.PORT}');
-});
+    console.log(`Application started on the port no : ${serverConfig.PORT}`)
+})
