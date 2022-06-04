@@ -10,9 +10,9 @@
  *
  */
 
+const config = require("../configs/db.config");
+const Sequelize = require("sequelize");
 
-const config = require('../configs/db.config');
-const Sequelize = require('sequelize');
 /**
  * 
  * Creating the db connection
@@ -31,6 +31,7 @@ const db = {};
 db.sequelize = Sequelize;
 db.sequelize = seq;
 db.catalog = require('./category.model.js')(seq, Sequelize);
+db.product = require('./product.model.js')(seq, Sequelize);
 //db.catalog = require('./category.model.js')(db.sequelize, Sequelize); we can write like that too
 
 /**

@@ -4,10 +4,13 @@
  *  reuseable for everywear outsaid the code only
  *  with call that fucntion for use entier code///
  * 
- *
+ * This file contains the controller logic for the category
+ * resource. 
+ * Everytime a CRUD request come for the category, methods defined
+ * in this contoller file will be executed. 
  */
 
-
+const req = require("express/lib/request");
 const db = require("../models");
 const Category = db.category;
 
@@ -66,7 +69,7 @@ exports.findAll = (req, res) => {
         promise = Category.findAll();
     }
     promise
-        .then(category => {
+        .then(categories => {
             res.status(200).send(categories);
         })
         .catch(erro => {
@@ -82,15 +85,22 @@ exports.findAll = (req, res) => {
 
 exports.findOne = (req, res) => {
         const categoryId = req.params.id;
-        Category.findByPK(categoryId)
+
+        Category.findByPk(categoryId)
             .then(category => {
+
+                if (!category) {
+                    return res.status(404).json({
+                        message: 'Category not found'
+                    })
+                }
                 res.status(200).send(category);
             })
-            .catch(erro => {
+            .catch(err => {
                 res.status(500).send({
-                    message: "some internal error while fetching the categories",
+                    message: "Some internal error while fetching the category based on id"
                 })
-            });
+            })
     }
     /** 
      * Update the existing category
@@ -98,6 +108,7 @@ exports.findOne = (req, res) => {
 
 
 exports.update = (req, res) => {
+
     const category = {
         name: req.body.name,
         description: req.body.description
@@ -126,6 +137,32 @@ exports.update = (req, res) => {
             //where the updation task failed.
             res.status(500).send({
                 message: "some insternal error while upadating the categories"
+            })
+        })
+}
+
+/**
+ * Delete an existing category based on category id 
+ */
+
+exports.delete = (req, res) => {
+
+    const categoryId = req.params.id;
+
+    Category.destroy({
+            where: {
+                id: categoryId
+            }
+        })
+        .then(result => {
+            res.status(200).send({
+                message: "Successfully delete the category"
+
+            })
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Some internal error while deleting the category based on id"
             })
         })
 }

@@ -8,7 +8,8 @@
  * 3. description
  */
 module.exports = (sequelize, Sequelize) => {
-    const Category = Sequelize.define("Category", {
+    const Category = sequelize.define('Category')
+    "Category", {
         id: {
             type: Sequelize.Integer,
             primaryKey: true,
@@ -22,6 +23,6 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
 
         }
-    });
+    }
     return Category;
 }
