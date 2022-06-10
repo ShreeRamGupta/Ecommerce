@@ -1,12 +1,9 @@
-const express = require('express');
+const expresss = require('express');
 const serverConfig = require('./configs/server.config');
 const bodyParser = require('body-parser');
 
-
-
-
 //intialising express
-const app = express();
+const app = expresss();
 
 /**
  * Using the body parser middleware
@@ -23,6 +20,9 @@ app.use(bodyParser.json());
  */
 const db = require("./models");
 const Category = db.category;
+const Product = db.product;
+
+Category.hasMany(Product); //This will create a foreign key column (categoryId) in product table
 
 db.sequelize.sync({ force: true })
     .then(() => {
@@ -41,86 +41,19 @@ function init() {
         }
     ];
 
-    // Category.bulkCreate(categories)
-    //     .then(() => {
-    //         console.log("Category table initialised");
-    //     })
-    //     .catch(err => {
-    //         console.log("Error while initialising categories table");
-    //     })
+    Category.bulkCreate(categories)
+        .then(() => {
+            console.log("Category table initialised");
+        })
+        .catch(err => {
+            console.log("Error while initialising categories table");
+        })
 }
 
 require('./routes/category.routes')(app)
 require('./routes/product.routes')(app)
 
+
 app.listen(serverConfig.PORT, () => {
     console.log(`Application started on the port no : ${serverConfig.PORT}`)
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// //intialising express
-// const app = express();
-
-// /**
-//  * Using the body parser middleware
-//  */
-
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
-
-// /**
-//  * Initialising the database
-//  */
-// const db = require("./models");
-// const Category = db.category;
-
-// db.sequelize.sync({ force: true })
-//     .then(() => {
-//         console.log('table dropped and created');
-//         init();
-//     })
-
-// function init() {
-
-//     var categories = [{
-
-//             name: 'Electronics',
-//             description: "this category will contain all the electrical components"
-//         },
-//         {
-//             name: "kitchenItems",
-//             description: "this category will contain all the kitchen roduct"
-
-//         }
-//     ];
-
-//     Category.bulkCreate(categories)
-//         .then(() => {
-//             console.log("Category table initialised");
-//         })
-//         .catch(err => {
-//             console.log("Error while initialising categories table");
-//         })
-// }
-
-// require('./routes/category.routes')(app)
-
-
-// app.listen(serverConfig.PORT, () => {
-//     console.log(`Application started on the port no : ${serverConfig.PORT}`)
-// })
